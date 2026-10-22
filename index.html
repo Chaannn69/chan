@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Jade Agonias | About Me</title>
+<style>
+  :root {
+    --bg: #fdf6ec;
+    --surface: #ffffff;
+    --text: #2b2d42;
+    --muted: #6c6f85;
+    --accent: #ff6b6b;
+    --accent-2: #4ecdc4;
+    --accent-3: #ffd166;
+    --shadow: 0 10px 30px rgba(43, 45, 66, 0.12);
+    --radius: 20px;
+  }
+  [data-theme="dark"] {
+    --bg: #14161f;
+    --surface: #1f2230;
+    --text: #f1f1f5;
+    --muted: #a3a6bd;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
+
+  /* Scroll progress bar */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 4px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+    z-index: 100;
+  }
+
+  /* Floating blobs that follow the cursor */
+  .blob {
+    position: fixed; width: 420px; height: 420px; border-radius: 50%;
+    filter: blur(80px); opacity: 0.35; pointer-events: none; z-index: 0;
+    transition: transform 1.2s ease-out;
+  }
+  #blob1 { background: var(--accent); top: -120px; left: -120px; }
+  #blob2 { background: var(--accent-2); bottom: -150px; right: -120px; }
+
+  nav {
+    position: fixed; top: 16px; right: 20px; z-index: 50;
+    display: flex; gap: 14px; align-items: center;
+    background: var(--surface); padding: 10px 18px; border-radius: 999px;
+    box-shadow: var(--shadow);
+  }
+  nav a {
+    color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600;
+    position: relative;
+  }
+  nav a::after {
+    content: ""; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px;
+    background: var(--accent); transition: width 0.3s;
+  }
+  nav a:hover::after { width: 100%; }
+  #themeBtn {
+    border: none; cursor: pointer; font-size: 1rem; background: transparent;
+  }
+
+  section {
+    position: relative; z-index: 1;
+    min-height: 100vh; padding: 100px 8% 60px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* HERO */
+  .hero { flex-direction: row; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .hero-text { max-width: 560px; }
+  .hello {
+    display: inline-block; background: var(--accent-3); color: #2b2d42;
+    padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 0.9rem;
+    margin-bottom: 18px; animation: wiggle 2.5s infinite;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0); }
+    10% { transform: rotate(-4deg); }
+    20% { transform: rotate(4deg); }
+    30% { transform: rotate(0); }
+  }
+  h1 { font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1.05; margin-bottom: 14px; }
+  h1 .highlight {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .role { font-size: 1.4rem; color: var(--muted); min-height: 2em; }
+  .role span.cursor { border-right: 3px solid var(--accent); animation: blink 0.8s infinite; }
+  @keyframes blink { 50% { border-color: transparent; } }
+
+  .photo-wrap {
+    position: relative; width: 300px; height: 300px;
+  }
+  .photo {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    border: 8px solid var(--surface); box-shadow: var(--shadow);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; font-weight: 800; color: white;
+    transition: transform 0.5s;
+  }
+  .photo:hover { transform: rotate(-6deg) scale(1.04); }
+  .sticker {
+    position: absolute; background: var(--surface); padding: 10px 14px;
+    border-radius: 14px; box-shadow: var(--shadow); font-weight: 600; font-size: 0.9rem;
+    animation: float 4s ease-in-out infinite;
+  }
+  .sticker.s1 { top: 10px; left: -30px; }
+  .sticker.s2 { bottom: 20px; right: -20px; animation-delay: 1.5s; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .scroll-hint {
+    margin-top: 40px; color: var(--muted); font-size: 0.9rem; animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(8px);} }
+
+  /* Section headings */
+  h2 { font-size: 2.4rem; margin-bottom: 24px; }
+  h2 .num { color: var(--accent); font-size: 1rem; vertical-align: super; margin-right: 8px; }
+
+  /* ABOUT */
+  .about-text { font-size: 1.15rem; line-height: 1.8; max-width: 720px; color: var(--muted); }
+  .about-text strong { color: var(--text); }
+  .counters { display: flex; gap: 24px; margin-top: 36px; flex-wrap: wrap; }
+  .counter {
+    background: var(--surface); padding: 22px 28px; border-radius: var(--radius);
+    box-shadow: var(--shadow); min-width: 150px; text-align: center;
+  }
+  .counter .num-big { font-size: 2.4rem; font-weight: 800; color: var(--accent); }
+  .counter .label { color: var(--muted); font-size: 0.9rem; }
+
+  /* HOBBIES */
+  .hobbies { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+  .flip {
+    perspective: 1000px; height: 220px; cursor: pointer;
+  }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.7s; transform-style: preserve-3d;
+  }
+  .flip.active .flip-inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px; text-align: center;
+  }
+  .front { background: var(--surface); }
+  .back {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white; transform: rotateY(180deg);
+  }
+  .emoji { font-size: 3rem; margin-bottom: 10px; }
+  .face h3 { font-size: 1.3rem; margin-bottom: 6px; }
+  .face p { font-size: 0.95rem; opacity: 0.9; }
+  .hint-tap { font-size: 0.75rem; color: var(--muted); margin-top: 8px; }
+
+  /* SKILLS */
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px 40px; max-width: 900px; }
+  .skill-label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 8px; }
+  .bar { height: 14px; background: var(--surface); border-radius: 999px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+  .fill {
+    height: 100%; width: 0; border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width 1.4s cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 32px; max-width: 620px;
+  }
+  .quiz-q { font-size: 1.25rem; font-weight: 700; margin-bottom: 18px; }
+  .options { display: flex; flex-wrap: wrap; gap: 12px; }
+  .opt {
+    border: 2px solid var(--accent-2); background: transparent; color: var(--text);
+    padding: 10px 18px; border-radius: 999px; cursor: pointer; font-size: 0.95rem;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .opt:hover { transform: scale(1.06); background: var(--accent-2); color: #111; }
+  .opt.correct { background: #2ecc71; border-color: #2ecc71; color: white; }
+  .opt.wrong { background: var(--accent); border-color: var(--accent); color: white; }
+  #quizResult { margin-top: 18px; font-weight: 600; min-height: 1.5em; color: var(--accent); }
+
+  /* CONTACT */
+  .contact-box { text-align: center; }
+  .contact-box p { color: var(--muted); font-size: 1.1rem; margin-bottom: 22px; }
+  .email-btn {
+    display: inline-block; background: var(--accent); color: white; border: none;
+    padding: 16px 32px; border-radius: 999px; font-size: 1.05rem; font-weight: 700;
+    cursor: pointer; box-shadow: var(--shadow); transition: transform 0.2s;
+  }
+  .email-btn:hover { transform: translateY(-4px) scale(1.04); }
+  .social { margin-top: 28px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .social a {
+    background: var(--surface); color: var(--text); text-decoration: none;
+    padding: 10px 18px; border-radius: 12px; box-shadow: var(--shadow); font-weight: 600;
+  }
+  footer { text-align: center; color: var(--muted); padding: 30px; font-size: 0.85rem; position: relative; z-index: 1; }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120px);
+    background: var(--text); color: var(--bg); padding: 12px 22px; border-radius: 999px;
+    transition: transform 0.4s; z-index: 200; font-weight: 600;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Mini confetti */
+  .confetti {
+    position: fixed; width: 10px; height: 10px; z-index: 300; pointer-events: none;
+    animation: fall 1.4s ease-in forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @media (max-width: 700px) {
+    nav { left: 50%; right: auto; transform: translateX(-50%); width: max-content; }
+    .photo-wrap { width: 240px; height: 240px; }
+    .sticker { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="blob" id="blob1"></div>
+<div class="blob" id="blob2"></div>
+
+<nav>
+  <a href="#about">About</a>
+  <a href="#hobbies">Hobbies</a>
+  <a href="#skills">Skills</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#contact">Contact</a>
+  <button id="themeBtn" aria-label="Toggle theme">🌙</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <span class="hello">👋 Hey there, welcome!</span>
+    <h1>I'm <span class="highlight">Chrisitian Jade Agonias</span></h1>
+    <div class="role"><span id="typed"></span><span class="cursor"></span></div>
+    <div class="scroll-hint">Scroll to get to know me ↓</div>
+  </div>
+  <div class="photo-wrap">
+    <!-- Replace src with your photo, e.g. "me.jpg". Falls back to initials if missing. -->
+    <img class="photo" src="c:\Users\ACER USER\Downloads\4a44a5ac-f958-4955-b544-df56e6ed7877.jfif" alt="Photo of [Your Name]"
+         style="display:block;" onerror="this.outerHTML='<div class=&quot;photo&quot;>YN</div>'">
+    <div class="sticker s1">📍 Cebu City</div>
+    <div class="sticker s2">☕ Fueled by coffee</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="reveal"><span class="num">01</span>About Me</h2>
+  <p class="about-text reveal">
+    Hi! I'm a <strong>BSIT 3RD YEAR</strong> student who loves building things that people actually enjoy using.
+    I'm curious about <strong>computers</strong>, and I believe the best ideas come from
+    <strong>asking "what if?"</strong> one more time than feels comfortable.
+  </p>
+  <div class="counters reveal">
+    <div class="counter"><div class="num-big" data-target="5">0</div><div class="label">Projects built</div></div>
+    <div class="counter"><div class="num-big" data-target="3">0</div><div class="label">Languages spoken</div></div>
+    <div class="counter"><div class="num-big" data-target="100">0</div><div class="label">% Coffee powered</div></div>
+  </div>
+</section>
+
+<!-- HOBBIES -->
+<section id="hobbies">
+  <h2 class="reveal"><span class="num">02</span>What I Do For Fun</h2>
+  <p class="about-text reveal" style="margin-bottom:30px;">Tap a card to flip it!</p>
+  <div class="hobbies">
+    <div class="flip reveal">
+      <div class="flip-inner">
+        <div class="face front"><div class="emoji">🎵</div><h3>Music</h3><p>Playing and listening</p><div class="hint-tap">tap me</div></div>
+        <div class="face back"><p>Why I love it: music helps me think clearly and unwind after a long day.</p></div>
+      </div>
+    </div>
+    <div class="flip reveal">
+      <div class="flip-inner">
+        <div class="face front"><div class="emoji">🎮</div><h3>Gaming</h3><p>Strategy and story</p><div class="hint-tap">tap me</div></div>
+        <div class="face back"><p>Why I love it: games teach me problem solving, patience, and teamwork.</p></div>
+      </div>
+    </div>
+    <div class="flip reveal">
+      <div class="flip-inner">
+        <div class="face front"><div class="emoji">📸</div><h3>Photography</h3><p>Catching small moments</p><div class="hint-tap">tap me</div></div>
+        <div class="face back"><p>Why I love it: it trains me to notice details most people walk right past.</p></div>
+      </div>
+    </div>
+    <div class="flip reveal">
+      <div class="flip-inner">
+        <div class="face front"><div class="emoji">🍳</div><h3>Cooking</h3><p>Experimenting in the kitchen</p><div class="hint-tap">tap me</div></div>
+        <div class="face back"><p>Why I love it: every recipe is a tiny science experiment I can eat.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2 class="reveal"><span class="num">03</span>My Skills</h2>
+  <div class="skills">
+    <div class="reveal">
+      <div class="skill-label"><span>HTML / CSS</span><span>85%</span></div>
+      <div class="bar"><div class="fill" data-width="85"></div></div>
+    </div>
+    <div class="reveal">
+      <div class="skill-label"><span>JavaScript</span><span>75%</span></div>
+      <div class="bar"><div class="fill" data-width="75"></div></div>
+    </div>
+    <div class="reveal">
+      <div class="skill-label"><span>Communication</span><span>90%</span></div>
+      <div class="bar"><div class="fill" data-width="90"></div></div>
+    </div>
+    <div class="reveal">
+      <div class="skill-label"><span>Teamwork</span><span>88%</span></div>
+      <div class="bar"><div class="fill" data-width="88"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <h2 class="reveal"><span class="num">04</span>Quick Quiz: How Well Do You Know Me?</h2>
+  <div class="quiz-card reveal">
+    <p class="quiz-q" id="qText"></p>
+    <div class="options" id="qOptions"></div>
+    <div id="quizResult"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-box reveal">
+    <h2>Let's Connect!</h2>
+    <p>Got an idea, a question, or just want to say hi? My inbox is open.</p>
+    <button class="email-btn" id="emailBtn">📋 Copy my email</button>
+    <div class="social">
+      <a href="#" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</section>
+
+<footer>Made with curiosity and a lot of coffee ☕ · © <span id="year"></span> [Your Name]</footer>
+
+<div id="toast">Copied!</div>
+
+<script>
+  // Typing effect
+  const roles = ["a student", "a builder", "a dreamer", "a coffee enthusiast"];
+  let r = 0, c = 0, deleting = false;
+  const typed = document.getElementById("typed");
+  function typeLoop() {
+    const word = roles[r];
+    typed.textContent = deleting ? word.slice(0, c--) : word.slice(0, c++);
+    let delay = deleting ? 60 : 110;
+    if (!deleting && c > word.length) { deleting = true; delay = 1400; }
+    else if (deleting && c < 0) { deleting = false; c = 0; r = (r + 1) % roles.length; delay = 300; }
+    setTimeout(typeLoop, delay);
+  }
+  typeLoop();
+
+  // Cursor-following blobs
+  document.addEventListener("mousemove", e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 60;
+    const y = (e.clientY / window.innerHeight - 0.5) * 60;
+    document.getElementById("blob1").style.transform = `translate(${x}px, ${y}px)`;
+    document.getElementById("blob2").style.transform = `translate(${-x}px, ${-y}px)`;
+  });
+
+  // Scroll progress
+  window.addEventListener("scroll", () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById("progress").style.width = pct + "%";
+  });
+
+  // Reveal on scroll + trigger skill bars and counters
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("visible");
+      entry.target.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.width + "%");
+      entry.target.querySelectorAll(".num-big").forEach(animateCount);
+      if (entry.target.classList.contains("fill")) entry.target.style.width = entry.target.dataset.width + "%";
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll(".reveal, #skills .skills, .counters").forEach(el => observer.observe(el));
+
+  function animateCount(el) {
+    const target = +el.dataset.target;
+    let n = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
+    const timer = setInterval(() => {
+      n += step;
+      if (n >= target) { n = target; clearInterval(timer); }
+      el.textContent = n;
+    }, 40);
+  }
+
+  // Flip hobby cards
+  document.querySelectorAll(".flip").forEach(card => {
+    card.addEventListener("click", () => card.classList.toggle("active"));
+  });
+
+  // Quiz
+  const questions = [
+    { q: "What's my favorite way to spend a free afternoon?", options: ["Gaming", "Cooking something new", "Exploring with my camera"], answer: 1 },
+    { q: "What keeps me going on tough days?", options: ["Music", "Sleep", "Snacks"], answer: 0 },
+    { q: "What would you find in my bag?", options: ["A notebook", "Snacks", "A tiny camera"], answer: 1 }
+  ];
+  let qi = 0, score = 0;
+  const qText = document.getElementById("qText");
+  const qOptions = document.getElementById("qOptions");
+  const quizResult = document.getElementById("quizResult");
+
+  function renderQuestion() {
+    if (qi >= questions.length) {
+      quizResult.textContent = `You got ${score}/${questions.length}! ${score === questions.length ? "You really know me 🎉" : "Let's grab coffee and fix that ☕"}`;
+      qText.textContent = "Quiz complete!";
+      qOptions.innerHTML = `<button class="opt" onclick="restartQuiz()">Play again</button>`;
+      return;
+    }
+    const item = questions[qi];
+    qText.textContent = item.q;
+    quizResult.textContent = "";
+    qOptions.innerHTML = "";
+    item.options.forEach((text, idx) => {
+      const b = document.createElement("button");
+      b.className = "opt";
+      b.textContent = text;
+      b.onclick = () => answer(idx, b);
+      qOptions.appendChild(b);
+    });
+  }
+  function answer(idx, btn) {
+    const correct = questions[qi].answer;
+    const buttons = qOptions.querySelectorAll(".opt");
+    buttons.forEach(b => b.disabled = true);
+    if (idx === correct) {
+      btn.classList.add("correct");
+      score++;
+      quizResult.textContent = "Nailed it! 🎉";
+      confettiBurst();
+    } else {
+      btn.classList.add("wrong");
+      buttons[correct].classList.add("correct");
+      quizResult.textContent = "Close! Keep guessing.";
+    }
+    setTimeout(() => { qi++; renderQuestion(); }, 1400);
+  }
+  function restartQuiz() { qi = 0; score = 0; renderQuestion(); }
+  renderQuestion();
+
+  // Confetti
+  function confettiBurst() {
+    const colors = ["#ff6b6b", "#4ecdc4", "#ffd166", "#9b5de5"];
+    for (let i = 0; i < 40; i++) {
+      const d = document.createElement("div");
+      d.className = "confetti";
+      d.style.left = Math.random() * 100 + "vw";
+      d.style.top = "-10px";
+      d.style.background = colors[i % colors.length];
+      d.style.animationDelay = Math.random() * 0.3 + "s";
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 2000);
+    }
+  }
+
+  // Copy email with toast
+  const toast = document.getElementById("toast");
+  document.getElementById("emailBtn").addEventListener("click", () => {
+    navigator.clipboard?.writeText("your.email@example.com");
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  });
+
+  // Theme toggle
+  const themeBtn = document.getElementById("themeBtn");
+  themeBtn.addEventListener("click", () => {
+    const dark = document.documentElement.getAttribute("data-theme") === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+    themeBtn.textContent = dark ? "🌙" : "☀️";
+  });
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
